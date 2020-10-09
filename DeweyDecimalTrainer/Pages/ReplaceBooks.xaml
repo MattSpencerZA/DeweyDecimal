@@ -1,0 +1,46 @@
+﻿<Page x:Class="DeweyDecimalTrainer.Pages.ReplaceBooks"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DeweyDecimalTrainer.Pages"
+      xmlns:deweydecimaltraining="clr-namespace:DeweyDecimalTrainer"
+
+      mc:Ignorable="d" 
+      d:DesignHeight="507" d:DesignWidth="800"
+      Title="ReplaceBooks">
+
+    <Grid>
+        <DataGrid CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" RowHeaderWidth="0" CanUserAddRows="False" CanUserDeleteRows="False"
+                  RowBackground="White" CanUserResizeRows="False" ColumnWidth="*" FontSize="16" x:Name="DataGrid" Background="White"
+                  HorizontalAlignment="Left" ItemsSource="{Binding Decimal}" Height="392" VerticalAlignment="Top" Width="628" SelectionChanged="DataGrid_SelectionChanged"
+                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="Gray" SelectionMode="Single" IsReadOnly="True" Margin="162,0,0,0"
+                  deweydecimaltraining:DataGridHelper.EnableRowsMove="True" IsEnabled="False">
+            <DataGrid.Resources>
+                <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="Background" Value="Black" />
+                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="Padding" Value="5" />
+                    <Setter Property="FontSize" Value="25"/>
+                </Style>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="LightBlue"/>
+            </DataGrid.Resources>
+            <DataGrid.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="FontSize" Value="25" />
+                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                </Style>
+            </DataGrid.CellStyle>
+        </DataGrid>
+        <Button x:Name="Start" Content="Start" HorizontalAlignment="Left" Margin="10,99,0,0" VerticalAlignment="Top" Width="141" Height="48" FontSize="16" TabIndex="1" FontWeight="Bold" Click="Start_Click"/>
+        <Label Content="Elapsed Time" HorizontalAlignment="Left" Margin="10,11,0,0" VerticalAlignment="Top" Foreground="White" Width="141" RenderTransformOrigin="1.004,0.55" Height="40" HorizontalContentAlignment="Center" FontSize="20"/>
+        <Label x:Name="TimerLabel" Content="00:00:00" HorizontalAlignment="Left" Margin="10,54,0,0" VerticalAlignment="Top" Foreground="White" Width="141" RenderTransformOrigin="1.004,0.55" Height="40" HorizontalContentAlignment="Center" FontSize="18"/>
+        <Button x:Name="Checks_Order" Content="Check Order" HorizontalAlignment="Left" Margin="649,397,0,0" VerticalAlignment="Top" Width="141" Height="48" FontSize="16" TabIndex="1" FontWeight="Bold" Click="Check_Order"/>
+    </Grid>
+</Page>

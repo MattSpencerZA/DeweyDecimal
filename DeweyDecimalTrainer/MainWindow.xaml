@@ -1,0 +1,14 @@
+﻿<Window x:Class="DeweyDecimalTrainer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DeweyDecimalTrainer"
+        mc:Ignorable="d"
+        Title="Dewey Decimal V.01" Height="550" Width="800" Background="Transparent" >
+    <Border CornerRadius="5" BorderBrush="Gray" BorderThickness="0" Background="{StaticResource background}">
+        <Grid>
+            <Frame Name="frame" Content="" HorizontalAlignment="Center" Height="507" Width="800" VerticalAlignment="Top" Loaded="Frame_Loaded" NavigationUIVisibility="Hidden" Focusable="False" Margin="0,42,0,0"/>
+        </Grid>
+    </Border>
+</Window>

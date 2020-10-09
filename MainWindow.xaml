@@ -1,0 +1,61 @@
+﻿<Window x:Class="Dewey_Training.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Dewey_Training"
+        mc:Ignorable="d"
+        Title="Dewey Train" Height="755" Width="1050" Background="Transparent" ResizeMode="NoResize" WindowStyle="None" AllowsTransparency="True">
+    <Border CornerRadius="5" BorderBrush="#474747" BorderThickness="0" Background="{StaticResource MyImageBrush}">
+        <Grid Height="772" VerticalAlignment="Top">
+            <Frame Name="frame" Content="" HorizontalAlignment="Center" Height="707" Width="1050" VerticalAlignment="Top" Loaded="Frame_Loaded" NavigationUIVisibility="Hidden" Focusable="False" Margin="0,48,0,0"/>
+            <Button Name="exitBtn" Content="X" FontFamily="Arial" FontSize="45" HorizontalAlignment="Left" Margin="1003,1,0,0" VerticalAlignment="Top" Height="42" Click="exitBtn_Click" RenderTransformOrigin="-1.633,2.27" Width="37">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="VerticalContentAlignment" Value="Top"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Background}" Padding="0,0,0,1">
+                                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="#db000f"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Rectangle Visibility="Visible" Fill="Transparent" Name="titleBar" HorizontalAlignment="Left" Height="42" VerticalAlignment="Top" Width="956" MouseLeftButtonDown="TitleBar_MouseDown"/>
+            <Button x:Name="minimizeBtn" Content="⎺⎺⎺" FontFamily="Arial" FontSize="60" HorizontalAlignment="Left" Margin="961,0,0,0" VerticalAlignment="Top" Height="42" Click="minimizeBtn_Click" RenderTransformOrigin="-1.633,2.27" Width="37">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Background}" Padding="1,11,1,0">
+                                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="#0d00ff"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Label x:Name="lblUsername" Content="{Binding Username}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="380" FontFamily="Rockwell" Foreground="White" FontSize="20" MouseDown="LblUsername_OnMouseDown" Height="42"/>
+        </Grid>
+    </Border>
+</Window>

@@ -1,0 +1,14 @@
+﻿<Page x:Class="DeweyDecimalTrainer.Pages.LeaderBoard"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DeweyDecimalTrainer.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Complete">
+
+    <Grid>
+        <Label Content="Leaderboard Coming Soon" Foreground="White" FontSize="35" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Height="55" Width="800" Margin="0,187,0,0"/>
+    </Grid>
+</Page>
