@@ -1,0 +1,40 @@
+﻿<Page x:Class="DeweyDecimalTrainer.Pages.IdentifyAreas"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DeweyDecimalTrainer.Pages"
+      xmlns:deweydecimaltrainer="clr-namespace:DeweyDecimalTrainer"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="IdentifyAreas">
+
+    <Grid>
+        <Label x:Name="IdentifyAreasLabel" Content="Identify Areas" HorizontalAlignment="Left" Margin="43,30,0,0" VerticalAlignment="Top" Foreground="White" Width="172" RenderTransformOrigin="1.004,0.55" Height="41" HorizontalContentAlignment="Center" FontSize="20"/>
+        <Button Content="Start!" Click="BtnStart" HorizontalAlignment="Left" Margin="242,305,0,0" VerticalAlignment="Top" Height="47" Width="220" FontSize="20" RenderTransformOrigin="0.497,1.31"/>
+        <DataGrid x:Name="answers" CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" RowHeaderWidth="0" CanUserAddRows="False" CanUserDeleteRows="False" 
+                  RowBackground="White" CanUserResizeRows="False" ColumnWidth="*"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="Gray" SelectionMode="Single" Background="White" ItemsSource="{Binding DgAnswers}" Margin="467,30,66,225" deweydecimaltrainer:DataGridHelper.EnableRowsMove="True" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"
+                  AutoGenerateColumns="False" IsReadOnly="True" FontSize="18" SelectionChanged="questions_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding}"  Header="Answers" Width="250" />
+            </DataGrid.Columns>
+            <DataGrid.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="LightBlue"/>
+            </DataGrid.Resources>
+        </DataGrid>
+        <DataGrid x:Name="questions" CanUserSortColumns="True" CanUserReorderColumns="False" CanUserResizeColumns="False" RowHeaderWidth="0" CanUserAddRows="False" 
+                  CanUserDeleteRows="False" CanUserResizeRows="False" Background="White"
+                  HorizontalAlignment="Left" ItemsSource="{Binding DgQuestions}" Margin="259,30,333,288" deweydecimaltrainer:DataGridHelper.EnableRowsMove="True" 
+                  HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="Gray" SelectionMode="Single" IsReadOnly="True" FontSize="18">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding}"  Header="Questions" Width="250" />
+            </DataGrid.Columns>
+            <DataGrid.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="LightBlue"/>
+            </DataGrid.Resources>
+        </DataGrid>
+        <Label x:Name="TimerLabel" Content="00.00.00" HorizontalAlignment="Left" Margin="43,311,0,0" VerticalAlignment="Top" Foreground="White" Width="172" RenderTransformOrigin="1.004,0.55" Height="41" HorizontalContentAlignment="Center" FontSize="20"/>
+
+
+    </Grid>
+</Page>

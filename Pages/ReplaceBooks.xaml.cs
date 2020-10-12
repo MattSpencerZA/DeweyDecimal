@@ -1,3 +1,4 @@
+﻿using DeweyDecimalTrainer.LinkedList;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,99 +8,66 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Media;
 using System.Windows.Threading;
-using Dewey_Training.DoublyLinkedList;
-using Dewey_Training.Models;
-using Dewey_Training.Services;
 
-namespace Dewey_Training.Pages
+namespace DeweyDecimalTrainer.Pages
 {
     /// <summary>
     /// Interaction logic for ReplaceBooks.xaml
     /// </summary>
     public partial class ReplaceBooks : Page
     {
-
-        // Instantiate random number generator.  
-        private Random _random;
-
-        public ObservableCollection<DeweyDecimal> DeweyDecimal { get; set; }
-
-        LinkedList decimals = new LinkedList();
-
         // Correct Order
-        LinkedList orderedDeweyDecimals = new LinkedList();
-        public static List<string> orderedDeweyDecimalsString = new List<string>();
+        DoublyLinkedList correctlyOrderedDeweys = new DoublyLinkedList();
+        public static List<string> correctlyOrderedDeweysList = new List<string>();
 
-        // Timers
-        DispatcherTimer dispatcherTimer;
-        private int time;
-        private int totalTime;
+        // Stopwatches
+        DispatcherTimer dispatcherTimer = new DispatcherTimer();
+        Stopwatch stopWatch = new Stopwatch();
+        string currentTime = string.Empty;
+
+        // Instantiate random number generator.
+        private Random random;
+
+        DoublyLinkedList callnumbers = new DoublyLinkedList();
+
+        public ObservableCollection<DecimalClass> Decimal { get; set; }
 
         public ReplaceBooks()
         {
 
             InitializeComponent();
             GenerateBooks();
-            SetTimerLabel();
 
         }
 
-        private void SetTimerLabel()
-        {
-
-            if (MainWindow.difficulty.Equals("Easy"))
-            {
-                time = 60;
-                totalTime = 60;
-                TimerLabel.Content = "60";
-            }
-            if (MainWindow.difficulty.Equals("Medium"))
-            {
-                time = 40;
-                totalTime = 40;
-                TimerLabel.Content = "40";
-            }
-            if (MainWindow.difficulty.Equals("Hard"))
-            {
-                time = 30;
-                totalTime = 30;
-                TimerLabel.Content = "30";
-            }
-
-        }
-
-        private LinkedList AlphabetOrder(LinkedList decimals)
+        // Sorts the ordered linked list alphabetically
+        private DoublyLinkedList FinalizeOrder(DoublyLinkedList decimals)
         {
 
             List<string> deweys = new List<string>();
-            LinkedList d = new LinkedList();
+            DoublyLinkedList d = new DoublyLinkedList();
 
-            foreach (var dec in decimals)
-            {
-                deweys.Add(dec.Data.Decimal + " " + dec.Data.Author);
-            }
+            foreach (var dec in decimals) deweys.Add(dec.Data.Decimal + " " + dec.Data.Author);
 
             string[] array = deweys.ToArray();
 
             int i, j, l;
 
-            string[] arr1 = array;
-            string temp;
+            string[] arrayone = array;
+            string temporary;
 
-            l = arr1.Length;
+            l = arrayone.Length;
 
             for (i = 0; i < l; i++)
             {
                 for (j = 0; j < l - 1; j++)
                 {
-                    if (arr1[j].CompareTo(arr1[j + 1]) > 0)
+                    if (arrayone[j].CompareTo(arrayone[j + 1]) > 0)
                     {
-                        temp = arr1[j];
-                        arr1[j] = arr1[j + 1];
-                        arr1[j + 1] = temp;
+                        temporary = arrayone[j];
+                        arrayone[j] = arrayone[j + 1];
+                        arrayone[j + 1] = temporary;
                     }
                 }
             }
@@ -107,30 +75,31 @@ namespace Dewey_Training.Pages
             for (i = 0; i < l; i++)
             {
 
-                d.Add(new DeweyDecimal()
+                d.Add(new DecimalClass()
                 {
-                    Decimal = arr1[i].Split(" ")[0],
-                    Author = arr1[i].Split(" ")[1]
+                    Decimal = arrayone[i].Split(" ")[0],
+                    Author = arrayone[i].Split(" ")[1]
                 });
 
-                //Console.WriteLine(arr1[i]);
             }
 
             return d;
 
         }
+        private void Check_Order(object sender, RoutedEventArgs e)
+        {
+            CheckOrder();
+        }
 
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
-            CheckOrder();
 
         }
 
         private void CheckOrder()
         {
 
-            // User defined order
+            // Selected order
             List<string> decimals = new List<string>();
             List<string> authors = new List<string>();
             List<string> userSelection = new List<string>();
@@ -138,12 +107,12 @@ namespace Dewey_Training.Pages
             try
             {
 
-                var rows = GetDataGridRows(dataGrid);
+                var rows = GetDGRows(DataGrid);
 
                 foreach (DataGridRow row in rows)
                 {
 
-                    foreach (DataGridColumn column in dataGrid.Columns)
+                    foreach (DataGridColumn column in DataGrid.Columns)
                     {
                         if (column.GetCellContent(row) is TextBlock)
                         {
@@ -157,94 +126,90 @@ namespace Dewey_Training.Pages
                             {
                                 decimals.Add(cellContent.Text);
                             }
-
                         }
                     }
-
                 }
+                for (int i = 0; i < decimals.Count; i++) userSelection.Add(decimals[i] + " " + authors[i]);
 
-                for (int i = 0; i < decimals.Count; i++)
-                {
-
-                    userSelection.Add(decimals[i] + " " + authors[i]);
-
-                }
-
-                bool equal = userSelection.SequenceEqual(orderedDeweyDecimalsString);
+                bool equal = userSelection.SequenceEqual(correctlyOrderedDeweysList);
 
                 if (equal)
                 {
+                    stopWatch.Reset();
+                    string sMessageBoxText = $"Congratulations! \n Your time was \n{currentTime} ";
+                    string sCaption = "Completed! " + currentTime + " ";
 
-                    // Stop timer
-                    dispatcherTimer.Stop();
+                    var btnMessageBox = MessageBoxButton.OK;
+                    var icnMessageBox = MessageBoxImage.Information;
 
-                    // Navigate the user to confirmation page
-                    this.NavigationService.Navigate(new Complete((totalTime - time).ToString(), orderedDeweyDecimalsString));
+                    var rsltMessageBox = MessageBox.Show(sMessageBoxText, sCaption, btnMessageBox, icnMessageBox);
 
-                    // Reset timer
-                    time = totalTime;
-
+                    switch (rsltMessageBox)
+                    {
+                        case MessageBoxResult.OK:
+                            this.NavigationService.Navigate(new LeaderBoard());
+                            break;
+                        case MessageBoxResult.None:
+                            break;
+                        case MessageBoxResult.Cancel:
+                            break;
+                        case MessageBoxResult.Yes:
+                            break;
+                        case MessageBoxResult.No:
+                            break;
+                    }
                 }
-
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                // Do nothing
-
             }
-
         }
 
-        public IEnumerable<DataGridRow> GetDataGridRows(DataGrid grid)
+        public IEnumerable<DataGridRow> GetDGRows(DataGrid dg)
         {
-            var itemsSource = grid.ItemsSource as IEnumerable;
+            var itemsSource = dg.ItemsSource as IEnumerable;
+
             if (null == itemsSource) yield return null;
+
             foreach (var item in itemsSource)
             {
-                var row = grid.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
+                var row = dg.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
+
                 if (null != row) yield return row;
             }
         }
 
         // Generates a random number within a range.      
-        public string RandomNumber(int min, int max, bool isDecimal)
+        public string RandomNumberGenerator(int minimum, int maximum, bool isDewey)
         {
+            string num = random.Next(minimum, maximum).ToString();
 
-            string number = _random.Next(min, max).ToString();
-
-            if (isDecimal)
+            if (isDewey)
             {
-                if (number.Length == 2)
+                if (num.ToString().Length == 1)
                 {
-                    number = "0" + number;
+                    num = "00" + num;
                 }
-                if (number.Length == 1)
+                else if (num.ToString().Length == 2)
                 {
-                    number = "00" + number;
+                    num = "0" + num;
                 }
             }
-
-            return number;
+            return num;
         }
 
-        // Generates a random string with a given size.    
-        public string RandomString(int size, bool lowerCase = false)
+        // Generates a random string with a given size
+        public string RandomStringGenerator(int size, bool lowerCase = false)
         {
             var builder = new StringBuilder(size);
 
-            // Unicode/ASCII Letters are divided into two blocks
-            // (Letters 65–90 / 97–122):
-            // The first group containing the uppercase letters and
-            // the second group containing the lowercase.  
-
-            // char is a single Unicode character  
             char offset = lowerCase ? 'a' : 'A';
-            const int lettersOffset = 26; // A...Z or a..z: length=26  
+            const int lettersOffset = 26;
 
             for (var i = 0; i < size; i++)
             {
-                var @char = (char)_random.Next(offset, offset + lettersOffset);
+                var @char = (char)random.Next(offset, offset + lettersOffset);
                 builder.Append(@char);
             }
 
@@ -253,144 +218,106 @@ namespace Dewey_Training.Pages
 
         private void Start_Click(object sender, RoutedEventArgs e)
         {
+            if (Start.Content.Equals("Restart")) stopWatch.Reset();
 
-            if (Start.Content.Equals("Restart"))
-            {
-                dispatcherTimer.Stop();
-                time = totalTime;
-                SetTimerLabel();
-            }
-
-            dataGrid.IsEnabled = true;
+            DataGrid.IsEnabled = true;
 
             GenerateBooks();
-
-            dispatcherTimer = new DispatcherTimer();
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
-            dispatcherTimer.Tick += Dt_Tick;
-            dispatcherTimer.Start();
+            ExtractTimer();
 
             Start.Content = "Restart";
 
         }
 
+        private void ExtractTimer()
+        {
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 1);
+            dispatcherTimer.Tick += Dt_Tick;
+            stopWatch.Start();
+            dispatcherTimer.Start();
+        }
+
         private void Dt_Tick(object sender, EventArgs e)
         {
 
-            if (time > 0)
+            if (stopWatch.IsRunning)
             {
-
-                if (time <= 10)
-                {
-                    if (time%2 == 0)
-                    {
-                        TimerLabel.Foreground = Brushes.Red;
-                    }
-                    else
-                    {
-                        TimerLabel.Foreground = Brushes.White;
-                    }
-
-                    time--;
-                    TimerLabel.Content = string.Format("0{0}", time % 60);
-                }
-                else
-                {
-                    time--;
-                    TimerLabel.Content = string.Format("{0}", time % 60);
-                }
-
-            }
-            else
-            {
-
-                dispatcherTimer.Stop();
-
+                TimeSpan ts = stopWatch.Elapsed;
+                currentTime = String.Format("{0:00}:{1:00}:{2:00}",
+                    ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
+                TimerLabel.Content = currentTime;
             }
 
         }
 
         private void GenerateBooks()
         {
-
-            // Clear values
-            foreach (var item in decimals)
+            // Reset
+            foreach (var item in callnumbers)
             {
-                decimals.Remove(item.Data);
+                callnumbers.Remove(item.Data);
             }
 
-            foreach (var item in orderedDeweyDecimals)
+            foreach (var item in correctlyOrderedDeweys)
             {
-                orderedDeweyDecimals.Remove(item.Data);
+                correctlyOrderedDeweys.Remove(item.Data);
             }
 
-            orderedDeweyDecimalsString.Clear();
+            correctlyOrderedDeweysList.Clear();
 
             (this.Content as FrameworkElement).DataContext = null;
 
-            _random = new Random();
+            random = new Random();
 
-            int randomValue = Int32.Parse(RandomNumber(0, 4, false));
+            int randomNum = Int32.Parse(RandomNumberGenerator(0, 4, false));
 
-            orderedDeweyDecimals = decimals;
+            correctlyOrderedDeweys = callnumbers;
 
-            for (int i = 0; i < 10 - randomValue; i++)
+            for (int i = 0; i < 10 - randomNum; i++)
             {
-
-                decimals.Add(new DeweyDecimal()
+                callnumbers.Add(new DecimalClass()
                 {
-                    Decimal = RandomNumber(0, 999, true) + "." + RandomNumber(0, 9999, false),
-                    Author = RandomString(3)
+                    Author = RandomStringGenerator(3),
+                    Decimal = RandomNumberGenerator(0, 999, true) + "." + RandomNumberGenerator(0, 9999, false)
                 });
-
             }
 
-            for (int i = 0; i < randomValue; i++)
+            for (int i = 0; i < randomNum; i++)
             {
-
-                int index = Int32.Parse(RandomNumber(0, 10 - randomValue, false));
-                decimals.Add(new DeweyDecimal()
+                int index = Int32.Parse(RandomNumberGenerator(0, 10 - randomNum, false));
+                callnumbers.Add(new DecimalClass()
                 {
-                    Decimal = decimals.ElementAt(index).Data.Decimal,
-                    Author = RandomString(3)
+                    Author = RandomStringGenerator(3),
+                    Decimal = callnumbers.ElementAt(index).Data.Decimal
                 });
-
             }
 
-            // Determine correct order for the Dewey Decimals
-            orderedDeweyDecimals.BubbleSort();
+            // Calculates correct order for deweys
+            correctlyOrderedDeweys.CorrectSort();
 
-            // Determines the order for the authors
-            orderedDeweyDecimals = AlphabetOrder(orderedDeweyDecimals);
-
-            foreach (var item in orderedDeweyDecimals)
+            foreach (var item in correctlyOrderedDeweys)
             {
-
-                orderedDeweyDecimalsString.Add(item.Data.Decimal + " " + item.Data.Author);
-
+                Console.WriteLine(item.Data.Decimal + " " + item.Data.Author);
             }
 
-            ObservableCollection<DeweyDecimal> deweyDecimalTemp = new ObservableCollection<DeweyDecimal>();
-            foreach (var item in decimals)
+            // Calculates correct order for authors
+            correctlyOrderedDeweys = FinalizeOrder(correctlyOrderedDeweys);
+
+            foreach (var item in correctlyOrderedDeweys)
             {
-                deweyDecimalTemp.Add(item.Data);
+                correctlyOrderedDeweysList.Add(item.Data.Decimal + " " + item.Data.Author);
             }
 
-            deweyDecimalTemp.Shuffle();
+            ObservableCollection<DecimalClass> tempData = new ObservableCollection<DecimalClass>();
+            foreach (var item in callnumbers)
+            {
+                tempData.Add(item.Data);
+            }
+            tempData.Shuffle();
 
-            DeweyDecimal = new ObservableCollection<DeweyDecimal>(deweyDecimalTemp);
+            Decimal = new ObservableCollection<DecimalClass>(tempData);
 
             (this.Content as FrameworkElement).DataContext = this;
-
-        }
-
-        private void Return_Click(object sender, RoutedEventArgs e)
-        {
-
-            // Navigate the user to the menu page
-            this.NavigationService.Navigate(new MenuPage());
-
         }
     }
 }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           

@@ -1,32 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>Dewey_Training</RootNamespace>
+    <RootNamespace>DeweyDecimalTrainer</RootNamespace>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>logo.ico</ApplicationIcon>
+    <ApplicationIcon>books.ico</ApplicationIcon>
+    <StartupObject />
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Images\bookbackground.jpg" />
-    <None Remove="Images\gridviewbackground..jpg" />
+    <None Remove="images\background.jpg" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MaterialDesignColors" Version="1.2.6" />
-    <PackageReference Include="MaterialDesignThemes" Version="3.1.3" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.7" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="3.1.7" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Dewey Training DAL\Dewey Training DAL.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Images\bookbackground.jpg" />
-    <Resource Include="Images\gridviewbackground..jpg" />
+    <Resource Include="images\background.jpg" />
   </ItemGroup>
 
 </Project>
